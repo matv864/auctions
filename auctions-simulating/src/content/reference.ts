@@ -9,7 +9,7 @@ export const STRATEGY_LABELS: Record<StrategyKind, string> = {
 
 export const STRATEGY_HINTS: Record<StrategyKind, string> = {
   truthful:
-    'Ставит до своей оценки лота; в английском повышает на минимальный шаг, пока цена не слишком высока.',
+    'Ставит до своей оценки лота.',
   shade:
     'Занижает ставки (около 75% от оценки), чтобы платить меньше при победе.',
   aggressive:

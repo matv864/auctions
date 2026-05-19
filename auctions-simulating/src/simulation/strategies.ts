@@ -133,6 +133,13 @@ export function decideSealed(
   }
 
   let amount = maxBid
+  if (config.auctionType === 'sealed_first') {
+    if (player.strategy === 'truthful') {
+      amount = player.valuation-1
+    } else if (player.strategy === 'aggressive') {
+      amount = Math.floor(player.valuation * 0.9)
+    }
+  }
   if (player.collusionRole === 'favored' && collusion.sellerCollusion) {
     amount = player.valuation
   }
