@@ -1,0 +1,8 @@
+services:
+  web:
+    container_name: web
+    build: auctions-simulating
+    ports:
+      - "4173:4173"
+    restart: always
+
