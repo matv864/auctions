@@ -54,10 +54,14 @@ export function prepareLot(
   rng: Rng,
   roundIndex: number,
 ): { players: Player[]; collusion: CollusionInfo; auction: AuctionState } {
+  // Один RNG на лот, состояние сдвигается на каждого участника —
+  // иначе fork(одинаковый offset) даёт всем одну оценку и стратегию.
+  const lotRng = rng.fork(roundIndex * 1000 + 17)
+
   const updated = players.map((p) => ({
     ...p,
-    valuation: sampleValuation(config.probs.valuation, rng.fork(roundIndex * 100 + 1)),
-    strategy: pickStrategy(config.probs.strategies, rng.fork(roundIndex * 100 + 2)),
+    valuation: sampleValuation(config.probs.valuation, lotRng),
+    strategy: pickStrategy(config.probs.strategies, lotRng),
     collusionRole: 'none' as const,
     ringId: null,
     active: true,
