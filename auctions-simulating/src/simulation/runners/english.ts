@@ -6,28 +6,58 @@ import type {
 } from '../types.ts'
 import type { SimulationConfig } from '../types.ts'
 
+/** Минимальная допустимая ставка в текущем состоянии */
+export function minEnglishBid(
+  auction: EnglishAuctionState,
+  config: SimulationConfig,
+): number {
+  if (auction.highBidderId === null && auction.currentPrice === 0) {
+    return config.minBidIncrement
+  }
+  return auction.currentPrice + config.minBidIncrement
+}
+
+/**
+ * Недостаточная ставка → пас (игрок выбывает из раунда).
+ * Боты обычно сюда не попадают: decideEnglish заранее сравнивает с minRaise.
+ */
+export function normalizeEnglishAction(
+  auction: EnglishAuctionState,
+  player: Player,
+  action: PlayerAction,
+  config: SimulationConfig,
+): PlayerAction {
+  if (action.type !== 'bid') return action
+
+  const minValid = minEnglishBid(auction, config)
+  const tooLow =
+    action.amount <= auction.currentPrice || action.amount < minValid
+  const tooHigh = action.amount > player.valuation
+  const alreadyLeading = auction.highBidderId === player.id
+
+  if (tooLow || tooHigh || alreadyLeading) {
+    return { type: 'pass' }
+  }
+  return action
+}
+
 export function applyEnglishAction(
   auction: EnglishAuctionState,
   player: Player,
   action: PlayerAction,
   config: SimulationConfig,
-): EnglishAuctionState {
+): { auction: EnglishAuctionState; effectiveAction: PlayerAction } {
+  const effective = normalizeEnglishAction(auction, player, action, config)
   const next = { ...auction, activeIds: [...auction.activeIds] }
 
-  if (action.type === 'pass') {
+  if (effective.type !== 'bid') {
     next.activeIds = next.activeIds.filter((id) => id !== player.id)
-    return next
+    return { auction: next, effectiveAction: effective }
   }
 
-  if (action.type === 'bid') {
-    const minValid = next.currentPrice + config.minBidIncrement
-    if (action.amount >= minValid && action.amount <= player.valuation) {
-      next.currentPrice = action.amount
-      next.highBidderId = player.id
-    }
-  }
-
-  return next
+  next.currentPrice = effective.amount
+  next.highBidderId = player.id
+  return { auction: next, effectiveAction: effective }
 }
 
 export function checkEnglishEnd(auction: EnglishAuctionState): EnglishAuctionState {

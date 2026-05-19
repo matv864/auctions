@@ -203,6 +203,12 @@ button.primary {
   border-radius: 8px;
 }
 
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+
 .log ul {
   list-style: none;
   padding: 0;

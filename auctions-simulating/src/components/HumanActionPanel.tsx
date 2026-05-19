@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { minEnglishBid } from '../simulation/runners/english.ts'
 import type { GameState, PlayerAction } from '../simulation/types.ts'
 
 interface Props {
@@ -18,7 +19,7 @@ export function HumanActionPanel({ state, onSubmit }: Props) {
 
   const minBid =
     auction.kind === 'english'
-      ? auction.currentPrice + state.config.minBidIncrement
+      ? minEnglishBid(auction, state.config)
       : 0
 
   if (state.humanActionKind === 'sealed_bid') {
@@ -83,6 +84,10 @@ export function HumanActionPanel({ state, onSubmit }: Props) {
           Текущая цена: <strong>{auction.currentPrice}</strong>, мин. повышение:{' '}
           <strong>{minBid}</strong>, ваша оценка:{' '}
           <strong>{player.valuation}</strong>
+        </p>
+        <p className="hint">
+          Ставка ниже минимума или текущей цены засчитается как пас (вы выбываете
+          из раунда).
         </p>
         <div className="row">
           <input

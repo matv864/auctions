@@ -6,6 +6,7 @@ import type {
   SimulationConfig,
   StrategyKind,
 } from './types.ts'
+import { minEnglishBid } from './runners/english.ts'
 import type { Rng } from './rng.ts'
 
 export function pickStrategy(
@@ -65,7 +66,7 @@ export function decideEnglish(
   }
 
   const maxBid = maxBidForStrategy(player.strategy, player.valuation)
-  const minRaise = auction.currentPrice + config.minBidIncrement
+  const minRaise = minEnglishBid(auction, config)
 
   if (ringShouldDefer(player, collusion, auction.highBidderId)) {
     return { type: 'pass' }
@@ -83,12 +84,11 @@ export function decideEnglish(
     return { type: 'pass' }
   }
 
-  const bidAmount = Math.min(maxBid, minRaise)
   if (player.collusionRole === 'favored' && collusion.sellerCollusion) {
     return { type: 'bid', amount: Math.min(player.valuation, minRaise) }
   }
 
-  return { type: 'bid', amount: bidAmount }
+  return { type: 'bid', amount: minRaise }
 }
 
 export function decideDutch(
