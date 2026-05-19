@@ -14,7 +14,7 @@ import {
   checkDutchEnd,
   createDutchLog,
 } from './runners/dutch.ts'
-import { applySealedBid } from './runners/sealed.ts'
+import { applySealedBid, createSealedLog } from './runners/sealed.ts'
 import type {
   GamePhase,
   GameState,
@@ -131,14 +131,17 @@ export class GameController {
     if (!auction || auction.kind !== 'sealed' || !collusion) return
 
     let next = auction
+    const logs: TickLogEntry[] = [...this.state.tickLog]
+    let order = logs.length
     for (const p of players) {
       if (p.isHuman) continue
       const action = decideAction(p, next, collusion, config)
       if (action.type === 'bid') {
         next = applySealedBid(next, p.id, action.amount)
+        logs.push(createSealedLog(order++, p, action.amount))
       }
     }
-    this.state = { ...this.state, auction: next }
+    this.state = { ...this.state, auction: next, tickLog: logs }
   }
 
   private beginTick(): void {
@@ -217,6 +220,8 @@ export class GameController {
 
     if (this.state.auction?.kind === 'sealed') {
       if (action.type === 'bid') {
+        const logs = [...this.state.tickLog]
+        logs.push(createSealedLog(logs.length, player, action.amount))
         const next = applySealedBid(
           this.state.auction,
           playerId,
@@ -225,6 +230,7 @@ export class GameController {
         this.state = {
           ...this.state,
           auction: next,
+          tickLog: logs,
           phase: 'running',
           pendingHumanPlayerId: null,
           humanActionKind: null,

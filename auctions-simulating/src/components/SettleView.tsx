@@ -1,4 +1,4 @@
-import { isTickAuction } from '../simulation/types.ts'
+import { isSealedAuction, isTickAuction } from '../simulation/types.ts'
 import type { AuctionType, RoundResult, TickLogEntry } from '../simulation/types.ts'
 import { TickLogPanel } from './TickLogPanel.tsx'
 
@@ -61,7 +61,7 @@ export function SettleView({
         </tbody>
       </table>
 
-      {isTickAuction(auctionType) && (
+      {(isTickAuction(auctionType) || isSealedAuction(auctionType)) && (
         <TickLogPanel entries={tickLog} title="Журнал ставок раунда" />
       )}
 

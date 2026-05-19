@@ -180,6 +180,10 @@ export function isTickAuction(type: AuctionType): boolean {
   return type === 'english' || type === 'dutch'
 }
 
+export function isSealedAuction(type: AuctionType): boolean {
+  return type === 'sealed_first' || type === 'sealed_second'
+}
+
 export function defaultConfig(): SimulationConfig {
   return {
     auctionType: 'english',

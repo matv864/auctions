@@ -2,6 +2,7 @@ import type {
   Player,
   SealedAuctionState,
   SimulationConfig,
+  TickLogEntry,
 } from '../types.ts'
 
 export interface SealedOutcome {
@@ -9,6 +10,19 @@ export interface SealedOutcome {
   finalPrice: number
   sold: boolean
   secondPrice: number | null
+}
+
+export function createSealedLog(
+  order: number,
+  player: Player,
+  amount: number,
+): TickLogEntry {
+  return {
+    tick: order,
+    playerId: player.id,
+    playerName: player.name,
+    action: { type: 'bid', amount },
+  }
 }
 
 export function applySealedBid(
