@@ -69,7 +69,7 @@ export function HumanActionPanel({ state, onSubmit }: Props) {
             Принять цену
           </button>
           <button type="button" onClick={() => onSubmit({ type: 'pass' })}>
-            Пас
+            Ждать
           </button>
         </div>
       </div>

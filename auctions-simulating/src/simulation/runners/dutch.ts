@@ -22,10 +22,7 @@ export function applyDutchAction(
     return next
   }
 
-  if (action.type === 'pass') {
-    next.activeIds = next.activeIds.filter((id) => id !== player.id)
-  }
-
+  // Пас = «не по этой цене»; участник остаётся и сможет принять на следующих тиках.
   return next
 }
 
