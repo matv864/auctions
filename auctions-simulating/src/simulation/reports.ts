@@ -77,17 +77,4 @@ export function buildReport(
   }
 }
 
-export function auctionTypeLabel(type: string): string {
-  switch (type) {
-    case 'english':
-      return 'Английский'
-    case 'dutch':
-      return 'Голландский'
-    case 'sealed_first':
-      return 'Закрытый (1-я цена)'
-    case 'sealed_second':
-      return 'Закрытый (2-я цена)'
-    default:
-      return type
-  }
-}
+export { auctionTypeLabel } from '../content/reference.ts'

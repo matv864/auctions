@@ -1,3 +1,4 @@
+import { strategyLabel } from '../content/reference.ts'
 import { collusionRoleLabel } from '../simulation/collusion.ts'
 import { auctionTypeLabel } from '../simulation/reports.ts'
 import type { GameState } from '../simulation/types.ts'
@@ -110,7 +111,7 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
                 <td>{p.name}</td>
                 <td>{p.wealth.toFixed(0)}</td>
                 <td>{p.valuation || '—'}</td>
-                <td>{p.strategy}</td>
+                <td>{strategyLabel(p.strategy)}</td>
                 <td>{collusionRoleLabel(p.collusionRole)}</td>
                 <td>
                   {auction?.kind === 'sealed'

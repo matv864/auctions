@@ -1,9 +1,9 @@
+import { ALL_STRATEGIES, STRATEGY_LABELS } from '../content/reference.ts'
 import type {
   ReserveConfig,
   ReserveMode,
   SimulationConfig,
   SimulationProbabilities,
-  StrategyKind,
   ValuationDistributionKind,
 } from '../simulation/types.ts'
 
@@ -14,20 +14,6 @@ interface Props {
   onChangeReserve: (patch: Partial<ReserveConfig>) => void
   onBack: () => void
   onStart: () => void
-}
-
-const STRATEGIES: StrategyKind[] = [
-  'truthful',
-  'shade',
-  'aggressive',
-  'passive',
-]
-
-const STRATEGY_LABELS: Record<StrategyKind, string> = {
-  truthful: 'Честная',
-  shade: 'Занижение',
-  aggressive: 'Агрессивная',
-  passive: 'Пассивная',
 }
 
 export function StepProbabilities({
@@ -77,7 +63,7 @@ export function StepProbabilities({
 
       <h3>Веса стратегий</h3>
       <div className="strategy-grid">
-        {STRATEGIES.map((s) => (
+        {ALL_STRATEGIES.map((s) => (
           <label key={s} className="field">
             <span>{STRATEGY_LABELS[s]}</span>
             <input

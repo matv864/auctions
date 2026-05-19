@@ -209,6 +209,69 @@ button.primary {
   margin: 0 0 0.75rem;
 }
 
+.reference-guide {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--muted) 8%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.reference-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--muted) 70%, var(--fg, #1a1a2e));
+}
+
+.reference-section {
+  margin-bottom: 0.85rem;
+}
+
+.reference-section:last-child {
+  margin-bottom: 0;
+}
+
+.reference-section h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--muted) 55%, var(--fg, #1a1a2e));
+}
+
+.reference-section p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.reference-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reference-list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.reference-list li:last-child {
+  margin-bottom: 0;
+}
+
+.reference-list strong {
+  display: block;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--muted) 50%, var(--fg, #1a1a2e));
+  font-size: 0.82rem;
+}
+
+.reference-list span {
+  display: block;
+}
+
 .log ul {
   list-style: none;
   padding: 0;

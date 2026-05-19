@@ -1,3 +1,4 @@
+import { ReferenceGuide } from './components/ReferenceGuide.tsx'
 import { StepConfig } from './components/StepConfig.tsx'
 import { StepParticipants } from './components/StepParticipants.tsx'
 import { StepProbabilities } from './components/StepProbabilities.tsx'
@@ -104,6 +105,8 @@ function App() {
         {phase === 'summary' && (
           <SummaryView state={state} onReset={reset} />
         )}
+
+        <ReferenceGuide auctionType={config.auctionType} />
       </main>
     </div>
   )
