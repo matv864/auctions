@@ -195,8 +195,8 @@ export function defaultConfig(): SimulationConfig {
     humanPlays: true,
     seed: Math.floor(Math.random() * 1000),
     probs: {
-      sellerCollusion: 0.15,
-      participantRing: 0.2,
+      sellerCollusion: 0,
+      participantRing: 0,
       strategies: {
         truthful: 0.4,
         shade: 0.3,
