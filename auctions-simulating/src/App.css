@@ -276,7 +276,7 @@ button.primary {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 200px;
+  max-height: 280px;
   overflow-y: auto;
   font-size: 0.85rem;
   font-family: ui-monospace, monospace;

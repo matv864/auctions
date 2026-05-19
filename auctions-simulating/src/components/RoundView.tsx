@@ -4,23 +4,13 @@ import { auctionTypeLabel } from '../simulation/reports.ts'
 import type { GameState } from '../simulation/types.ts'
 import { isTickAuction } from '../simulation/types.ts'
 import { HumanActionPanel } from './HumanActionPanel.tsx'
+import { TickLogPanel } from './TickLogPanel.tsx'
 import type { PlayerAction } from '../simulation/types.ts'
 
 interface Props {
   state: GameState
   onStartRound: () => void
   onHumanAction: (action: PlayerAction) => void
-}
-
-function actionLabel(action: PlayerAction): string {
-  switch (action.type) {
-    case 'bid':
-      return `ставка ${action.amount}`
-    case 'pass':
-      return 'пас'
-    case 'accept':
-      return 'принял цену'
-  }
 }
 
 export function RoundView({ state, onStartRound, onHumanAction }: Props) {
@@ -134,20 +124,8 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
         <HumanActionPanel state={state} onSubmit={onHumanAction} />
       )}
 
-      {isTickAuction(config.auctionType) && tickLog.length > 0 && (
-        <div className="log">
-          <h3>Журнал ходов</h3>
-          <ul>
-            {[...tickLog].reverse().slice(0, 12).map((e, i) => (
-              <li key={`${e.tick}-${e.playerId}-${i}`}>
-                [тик {e.tick}] {e.playerName}: {actionLabel(e.action)}
-                {e.priceBefore !== undefined && e.priceAfter !== undefined
-                  ? ` · ${e.priceBefore} → ${e.priceAfter}`
-                  : ''}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {isTickAuction(config.auctionType) && (
+        <TickLogPanel entries={tickLog} limit={12} />
       )}
     </section>
   )

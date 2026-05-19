@@ -1,12 +1,22 @@
-import type { RoundResult } from '../simulation/types.ts'
+import { isTickAuction } from '../simulation/types.ts'
+import type { AuctionType, RoundResult, TickLogEntry } from '../simulation/types.ts'
+import { TickLogPanel } from './TickLogPanel.tsx'
 
 interface Props {
   result: RoundResult
+  auctionType: AuctionType
+  tickLog: TickLogEntry[]
   onNext: () => void
   isLast: boolean
 }
 
-export function SettleView({ result, onNext, isLast }: Props) {
+export function SettleView({
+  result,
+  auctionType,
+  tickLog,
+  onNext,
+  isLast,
+}: Props) {
   return (
     <section className="card wide">
       <h2>Итоги раунда {result.roundIndex + 1}</h2>
@@ -50,6 +60,10 @@ export function SettleView({ result, onNext, isLast }: Props) {
           ))}
         </tbody>
       </table>
+
+      {isTickAuction(auctionType) && (
+        <TickLogPanel entries={tickLog} title="Журнал ставок раунда" />
+      )}
 
       <button type="button" className="primary" onClick={onNext}>
         {isLast ? 'К итоговой статистике →' : 'Следующий раунд →'}

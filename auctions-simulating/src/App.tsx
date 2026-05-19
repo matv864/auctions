@@ -97,6 +97,8 @@ function App() {
         {phase === 'settle' && state.lastRoundResult && (
           <SettleView
             result={state.lastRoundResult}
+            auctionType={config.auctionType}
+            tickLog={state.tickLog}
             onNext={nextRound}
             isLast={state.currentRound + 1 >= config.roundCount}
           />
