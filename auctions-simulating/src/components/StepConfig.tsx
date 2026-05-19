@@ -49,28 +49,6 @@ export function StepConfig({ config, onChange, onNext }: Props) {
           />
         </label>
         <label className="field">
-          <span>Длительность тика (мс)</span>
-          <input
-            type="number"
-            min={200}
-            step={100}
-            value={config.tickMs}
-            onChange={(e) => onChange({ tickMs: Number(e.target.value) })}
-          />
-        </label>
-      </div>
-
-      <div className="row">
-        <label className="field">
-          <span>Макс. тиков в раунде</span>
-          <input
-            type="number"
-            min={5}
-            value={config.maxTicks}
-            onChange={(e) => onChange({ maxTicks: Number(e.target.value) })}
-          />
-        </label>
-        <label className="field">
           <span>Шаг ставки</span>
           <input
             type="number"
