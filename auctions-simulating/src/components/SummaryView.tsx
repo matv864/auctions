@@ -80,8 +80,8 @@ export function SummaryView({ state, onReset }: Props) {
           </tr>
         </thead>
         <tbody>
-          {report.roundSummaries.map((r) => (
-            <tr key={r.round}>
+          {report.roundSummaries.map((r, i) => (
+            <tr key={`round-${i}-${r.round}`}>
               <td>{r.round}</td>
               <td>{r.winner ?? '—'}</td>
               <td>{r.sold ? r.price : '—'}</td>

@@ -201,6 +201,10 @@ export class GameController {
       this.state.config,
     )
     this.applyAction(player, action)
+    if (this.state.phase !== 'running') {
+      this.tickQueue = []
+      return
+    }
     this.processNextInQueue()
   }
 
@@ -372,8 +376,9 @@ export class GameController {
   }
 
   private completeRound(): void {
-    const { config, players, auction, collusion } = this.state
+    const { config, players, auction, collusion, phase } = this.state
     if (!auction || !collusion) return
+    if (phase === 'settle' || phase === 'summary') return
 
     const tickCount =
       auction.kind === 'english' || auction.kind === 'dutch'

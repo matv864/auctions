@@ -189,7 +189,7 @@ export function defaultConfig(): SimulationConfig {
     minBidIncrement: 1,
     participantCount: 4,
     humanPlays: true,
-    seed: 42,
+    seed: Math.floor(Math.random() * 1000),
     probs: {
       sellerCollusion: 0.15,
       participantRing: 0.2,
