@@ -70,6 +70,7 @@ export function createDutchLog(
   tick: number,
   player: Player,
   action: PlayerAction,
+  priceBefore: number,
   priceAfter: number,
 ): TickLogEntry {
   return {
@@ -77,6 +78,7 @@ export function createDutchLog(
     playerId: player.id,
     playerName: player.name,
     action,
+    priceBefore,
     priceAfter,
   }
 }

@@ -131,6 +131,7 @@ export interface TickLogEntry {
   playerId: string
   playerName: string
   action: PlayerAction
+  priceBefore?: number
   priceAfter?: number
 }
 

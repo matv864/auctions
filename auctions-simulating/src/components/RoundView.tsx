@@ -140,7 +140,9 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
             {[...tickLog].reverse().slice(0, 12).map((e, i) => (
               <li key={`${e.tick}-${e.playerId}-${i}`}>
                 [тик {e.tick}] {e.playerName}: {actionLabel(e.action)}
-                {e.priceAfter !== undefined ? ` → ${e.priceAfter}` : ''}
+                {e.priceBefore !== undefined && e.priceAfter !== undefined
+                  ? ` · ${e.priceBefore} → ${e.priceAfter}`
+                  : ''}
               </li>
             ))}
           </ul>

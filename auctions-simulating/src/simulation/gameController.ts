@@ -247,6 +247,7 @@ export class GameController {
     const logs: TickLogEntry[] = [...this.state.tickLog]
 
     if (auction.kind === 'english') {
+      const priceBefore = auction.currentPrice
       const { auction: nextAuction, effectiveAction } = applyEnglishAction(
         auction,
         player,
@@ -255,12 +256,25 @@ export class GameController {
       )
       auction = checkEnglishEnd(nextAuction)
       logs.push(
-        createEnglishLog(tick, player, effectiveAction, auction.currentPrice),
+        createEnglishLog(
+          tick,
+          player,
+          effectiveAction,
+          priceBefore,
+          auction.currentPrice,
+        ),
       )
     } else if (auction.kind === 'dutch') {
+      const priceBefore = auction.currentPrice
       auction = applyDutchAction(auction, player, action)
       logs.push(
-        createDutchLog(tick, player, action, auction.currentPrice),
+        createDutchLog(
+          tick,
+          player,
+          action,
+          priceBefore,
+          auction.currentPrice,
+        ),
       )
       if (auction.ended) {
         this.state = { ...this.state, auction, tickLog: logs }
