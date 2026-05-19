@@ -53,7 +53,7 @@ export function assignCollusion(
 export function collusionRoleLabel(role: CollusionRole): string {
   switch (role) {
     case 'none':
-      return '—'
+      return '-'
     case 'ring_member':
       return 'кольцо'
     case 'favored':

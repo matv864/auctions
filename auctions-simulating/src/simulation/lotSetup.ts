@@ -54,7 +54,7 @@ export function prepareLot(
   rng: Rng,
   roundIndex: number,
 ): { players: Player[]; collusion: CollusionInfo; auction: AuctionState } {
-  // Один RNG на лот, состояние сдвигается на каждого участника —
+  // Один RNG на лот, состояние сдвигается на каждого участника -
   // иначе fork(одинаковый offset) даёт всем одну оценку и стратегию.
   const lotRng = rng.fork(roundIndex * 1000 + 17)
 

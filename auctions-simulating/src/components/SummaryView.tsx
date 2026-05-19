@@ -83,8 +83,8 @@ export function SummaryView({ state, onReset }: Props) {
           {report.roundSummaries.map((r, i) => (
             <tr key={`round-${i}-${r.round}`}>
               <td>{r.round}</td>
-              <td>{r.winner ?? '—'}</td>
-              <td>{r.sold ? r.price : '—'}</td>
+              <td>{r.winner ?? '-'}</td>
+              <td>{r.sold ? r.price : '-'}</td>
               <td>{r.sold ? 'да' : 'нет'}</td>
               <td>{r.efficient ? 'да' : 'нет'}</td>
               <td>{r.collusion ? 'да' : 'нет'}</td>

@@ -1,4 +1,4 @@
-/** Mulberry32 — fast seeded PRNG for reproducible simulations */
+/** Mulberry32 - fast seeded PRNG for reproducible simulations */
 export class Rng {
   private state: number
 

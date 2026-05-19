@@ -13,7 +13,7 @@ function actionLabel(action: PlayerAction): string {
 
 interface Props {
   entries: TickLogEntry[]
-  /** Во время раунда — последние N записей; в итогах — весь журнал */
+  /** Во время раунда - последние N записей; в итогах - весь журнал */
   limit?: number
   title?: string
 }

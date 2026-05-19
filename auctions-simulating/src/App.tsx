@@ -26,7 +26,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>Симуляция аукционов</h1>
-        <p className="tagline">Курсовой проект — сравнение механизмов торгов</p>
+        <p className="tagline">Курсовой проект - сравнение механизмов торгов</p>
         <nav className="phase-nav">
           {(
             [

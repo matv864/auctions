@@ -181,7 +181,7 @@ export class GameController {
       return
     }
 
-    // Лидеру не нужно действие — он ждёт перебития; пас здесь ошибочно выбивал его из торгов.
+    // Лидеру не нужно действие - он ждёт перебития; пас здесь ошибочно выбивал его из торгов.
     if (auction.kind === 'english' && auction.highBidderId === playerId) {
       this.processNextInQueue()
       return

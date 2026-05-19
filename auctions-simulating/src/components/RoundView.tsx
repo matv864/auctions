@@ -29,7 +29,7 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
     <section className="card wide">
       <header className="round-header">
         <h2>
-          Раунд {roundNum} / {config.roundCount} —{' '}
+          Раунд {roundNum} / {config.roundCount} -{' '}
           {auctionTypeLabel(config.auctionType)}
         </h2>
         <div className="round-header-actions">
@@ -137,7 +137,7 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
                 <td>{p.name}</td>
                 <td>{p.wealth.toFixed(0)}</td>
                 <td className={detailsVisible ? '' : 'cell-masked'}>
-                  {detailsVisible ? p.valuation || '—' : MASK}
+                  {detailsVisible ? p.valuation || '-' : MASK}
                 </td>
                 <td className={detailsVisible ? '' : 'cell-masked'}>
                   {detailsVisible ? strategyLabel(p.strategy) : MASK}
