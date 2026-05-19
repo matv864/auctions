@@ -71,19 +71,13 @@ export function checkEnglishEnd(auction: EnglishAuctionState): EnglishAuctionSta
     return next
   }
 
-  if (active.length === 1 && next.highBidderId !== null) {
-    next.ended = true
-    next.sold = next.currentPrice >= next.reservePrice
-    return next
-  }
-
   if (
     active.length === 1 &&
-    next.highBidderId === null &&
-    next.currentPrice === 0
+    next.highBidderId !== null &&
+    active[0] === next.highBidderId
   ) {
     next.ended = true
-    next.sold = false
+    next.sold = next.currentPrice >= next.reservePrice
     return next
   }
 

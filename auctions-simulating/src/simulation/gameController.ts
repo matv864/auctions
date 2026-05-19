@@ -177,6 +177,12 @@ export class GameController {
       return
     }
 
+    // Лидеру не нужно действие — он ждёт перебития; пас здесь ошибочно выбивал его из торгов.
+    if (auction.kind === 'english' && auction.highBidderId === playerId) {
+      this.processNextInQueue()
+      return
+    }
+
     if (player.isHuman) {
       this.state = {
         ...this.state,
@@ -307,8 +313,9 @@ export class GameController {
       if (auction.tick >= config.maxTicks) {
         auction = finalizeEnglish(auction)
       } else if (
-        auction.activeIds.length <= 1 &&
-        auction.highBidderId !== null
+        auction.activeIds.length === 1 &&
+        auction.highBidderId !== null &&
+        auction.activeIds[0] === auction.highBidderId
       ) {
         auction = finalizeEnglish(auction)
       } else if (!activeWithBids && noActivity && auction.tick > 0) {

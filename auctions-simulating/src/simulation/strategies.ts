@@ -72,10 +72,6 @@ export function decideEnglish(
     return { type: 'pass' }
   }
 
-  if (auction.highBidderId === player.id) {
-    return { type: 'pass' }
-  }
-
   if (maxBid < minRaise) {
     return { type: 'pass' }
   }
