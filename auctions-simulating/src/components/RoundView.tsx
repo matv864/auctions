@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { strategyLabel } from '../content/reference.ts'
 import { collusionRoleLabel } from '../simulation/collusion.ts'
 import { auctionTypeLabel } from '../simulation/reports.ts'
@@ -13,9 +14,16 @@ interface Props {
   onHumanAction: (action: PlayerAction) => void
 }
 
+const MASK = '···'
+
 export function RoundView({ state, onStartRound, onHumanAction }: Props) {
   const { config, players, auction, collusion, tickLog, currentRound } = state
   const roundNum = currentRound + 1
+  const [detailsVisible, setDetailsVisible] = useState(false)
+
+  useEffect(() => {
+    setDetailsVisible(false)
+  }, [currentRound])
 
   return (
     <section className="card wide">
@@ -24,23 +32,40 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
           Раунд {roundNum} / {config.roundCount} —{' '}
           {auctionTypeLabel(config.auctionType)}
         </h2>
-        {state.phase === 'round_reveal' && (
-          <button type="button" className="primary" onClick={onStartRound}>
-            Начать торги
+        <div className="round-header-actions">
+          <button
+            type="button"
+            className="ghost"
+            onClick={() => setDetailsVisible((v) => !v)}
+          >
+            {detailsVisible
+              ? 'Скрыть данные участников'
+              : 'Показать оценки, стратегии, сговоры и статусы'}
           </button>
-        )}
+          {state.phase === 'round_reveal' && (
+            <button type="button" className="primary" onClick={onStartRound}>
+              Начать торги
+            </button>
+          )}
+        </div>
       </header>
 
       {collusion && (
         <div className="collusion-banner">
-          {collusion.sellerCollusion && (
-            <span className="tag warn">Сговор продавца</span>
-          )}
-          {collusion.ringActive && (
-            <span className="tag warn">Кольцо участников</span>
-          )}
-          {!collusion.sellerCollusion && !collusion.ringActive && (
-            <span className="tag ok">Без сговора</span>
+          {detailsVisible ? (
+            <>
+              {collusion.sellerCollusion && (
+                <span className="tag warn">Сговор продавца</span>
+              )}
+              {collusion.ringActive && (
+                <span className="tag warn">Кольцо участников</span>
+              )}
+              {!collusion.sellerCollusion && !collusion.ringActive && (
+                <span className="tag ok">Без сговора</span>
+              )}
+            </>
+          ) : (
+            <span className="tag neutral">Сговор: скрыто</span>
           )}
         </div>
       )}
@@ -96,23 +121,34 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
             const sealedBid =
               auction?.kind === 'sealed' ? auction.bids[p.id] : null
 
+            const statusText =
+              auction?.kind === 'sealed'
+                ? sealedBid !== null
+                  ? p.isHuman && state.phase !== 'settle'
+                    ? 'скрыто'
+                    : String(sealedBid)
+                  : 'ожидание'
+                : active
+                  ? 'в игре'
+                  : 'выбыл'
+
             return (
               <tr key={p.id} className={p.isHuman ? 'human-row' : ''}>
                 <td>{p.name}</td>
                 <td>{p.wealth.toFixed(0)}</td>
-                <td>{p.valuation || '—'}</td>
-                <td>{strategyLabel(p.strategy)}</td>
-                <td>{collusionRoleLabel(p.collusionRole)}</td>
-                <td>
-                  {auction?.kind === 'sealed'
-                    ? sealedBid !== null
-                      ? p.isHuman && state.phase !== 'settle'
-                        ? 'скрыто'
-                        : sealedBid
-                      : 'ожидание'
-                    : active
-                      ? 'в игре'
-                      : 'выбыл'}
+                <td className={detailsVisible ? '' : 'cell-masked'}>
+                  {detailsVisible ? p.valuation || '—' : MASK}
+                </td>
+                <td className={detailsVisible ? '' : 'cell-masked'}>
+                  {detailsVisible ? strategyLabel(p.strategy) : MASK}
+                </td>
+                <td className={detailsVisible ? '' : 'cell-masked'}>
+                  {detailsVisible
+                    ? collusionRoleLabel(p.collusionRole)
+                    : MASK}
+                </td>
+                <td className={detailsVisible ? '' : 'cell-masked'}>
+                  {detailsVisible ? statusText : MASK}
                 </td>
               </tr>
             )
