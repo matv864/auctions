@@ -135,6 +135,7 @@ export class GameController {
     let order = logs.length
     for (const p of players) {
       if (p.isHuman) continue
+      if (next.bids[p.id] !== null) continue
       const action = decideAction(p, next, collusion, config)
       if (action.type === 'bid') {
         next = applySealedBid(next, p.id, action.amount)
@@ -221,7 +222,9 @@ export class GameController {
     if (this.state.auction?.kind === 'sealed') {
       if (action.type === 'bid') {
         const logs = [...this.state.tickLog]
-        logs.push(createSealedLog(logs.length, player, action.amount))
+        if (this.state.auction.bids[playerId] === null) {
+          logs.push(createSealedLog(logs.length, player, action.amount))
+        }
         const next = applySealedBid(
           this.state.auction,
           playerId,
@@ -420,9 +423,6 @@ export class GameController {
     this.state = { ...this.state, currentRound: nextRound }
     this.beginRound()
     this.state = { ...this.state, phase: 'round_reveal' }
-    if (!isTickAuction(this.state.config.auctionType)) {
-      this.runBotSealedBids()
-    }
   }
 
   goToSummary(): void {
