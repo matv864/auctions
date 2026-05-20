@@ -76,7 +76,8 @@ export function decideEnglish(
     return { type: 'pass' }
   }
 
-  if (player.strategy === 'passive' && auction.currentPrice > maxBid * 0.5) {
+  // Пассивные выходят, когда цена съела половину оценки (не половину потолка maxBid).
+  if (player.strategy === 'passive' && auction.currentPrice > player.valuation * 0.5) {
     return { type: 'pass' }
   }
 
