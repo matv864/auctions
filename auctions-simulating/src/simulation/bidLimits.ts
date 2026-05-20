@@ -8,10 +8,10 @@ export function maxBidForStrategy(
     case 'truthful':
       return valuation
     case 'shade':
-      return Math.floor(valuation * 0.75)
-    case 'aggressive':
-      return Math.min(valuation + 5, valuation * 1.05)
-    case 'passive':
       return Math.floor(valuation * 0.6)
+    case 'aggressive':
+      return valuation * 0.95
+    case 'passive':
+      return Math.floor(valuation * 0.5)
   }
 }
