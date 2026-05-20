@@ -1,3 +1,4 @@
+import { strategyLabel } from '../content/reference.ts'
 import { isSealedAuction, isTickAuction } from '../simulation/types.ts'
 import type { AuctionType, RoundResult, TickLogEntry } from '../simulation/types.ts'
 import { TickLogPanel } from './TickLogPanel.tsx'
@@ -42,6 +43,7 @@ export function SettleView({
           <tr>
             <th>Участник</th>
             <th>Оценка</th>
+            <th>Стратегия</th>
             <th>Прибыль</th>
             <th>Богатство</th>
           </tr>
@@ -51,6 +53,7 @@ export function SettleView({
             <tr key={o.playerId}>
               <td>{o.playerName}</td>
               <td>{o.valuation}</td>
+              <td>{strategyLabel(o.strategy)}</td>
               <td className={o.profit >= 0 ? 'pos' : 'neg'}>
                 {o.profit >= 0 ? '+' : ''}
                 {o.profit.toFixed(0)}

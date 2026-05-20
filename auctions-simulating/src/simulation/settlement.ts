@@ -61,6 +61,7 @@ export function settleRound(
       playerId: p.id,
       playerName: p.name,
       valuation: p.valuation,
+      strategy: p.strategy,
       wealthBefore: p.wealth,
       wealthAfter: updated.wealth,
       profit: updated.wealth - p.wealth,

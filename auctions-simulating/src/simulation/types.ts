@@ -156,6 +156,7 @@ export interface PlayerRoundOutcome {
   playerId: string
   playerName: string
   valuation: number
+  strategy: StrategyKind
   wealthBefore: number
   wealthAfter: number
   profit: number
