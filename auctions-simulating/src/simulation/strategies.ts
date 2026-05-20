@@ -6,8 +6,11 @@ import type {
   SimulationConfig,
   StrategyKind,
 } from './types.ts'
+import { maxBidForStrategy } from './bidLimits.ts'
 import { minEnglishBid } from './runners/english.ts'
 import type { Rng } from './rng.ts'
+
+export { maxBidForStrategy } from './bidLimits.ts'
 
 export function pickStrategy(
   weights: Record<StrategyKind, number>,
@@ -22,22 +25,6 @@ export function pickStrategy(
     if (roll <= 0) return kind
   }
   return entries[entries.length - 1]![0]
-}
-
-function maxBidForStrategy(
-  strategy: StrategyKind,
-  valuation: number,
-): number {
-  switch (strategy) {
-    case 'truthful':
-      return valuation
-    case 'shade':
-      return Math.floor(valuation * 0.75)
-    case 'aggressive':
-      return Math.min(valuation + 5, valuation * 1.05)
-    case 'passive':
-      return Math.floor(valuation * 0.6)
-  }
 }
 
 function ringShouldDefer(

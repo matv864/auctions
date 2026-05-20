@@ -1,3 +1,4 @@
+import { maxBidForStrategy } from '../bidLimits.ts'
 import type {
   EnglishAuctionState,
   Player,
@@ -32,7 +33,8 @@ export function normalizeEnglishAction(
   const minValid = minEnglishBid(auction, config)
   const tooLow =
     action.amount <= auction.currentPrice || action.amount < minValid
-  const tooHigh = action.amount > player.valuation
+  const bidCeiling = maxBidForStrategy(player.strategy, player.valuation)
+  const tooHigh = action.amount > bidCeiling
   const alreadyLeading = auction.highBidderId === player.id
 
   if (tooLow || tooHigh || alreadyLeading) {
