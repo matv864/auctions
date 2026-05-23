@@ -33,7 +33,7 @@ function App() {
         >
           GitHub проекта
         </a>
-        <a className="corner-link" href="/storage" download>
+        <a className="corner-link" href="/storage">
           Файлы курсовой работы
         </a>
       </div>
