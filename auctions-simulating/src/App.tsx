@@ -24,13 +24,19 @@ function App() {
 
   return (
     <div className="app">
-      <a
-        className="bg-download-link"
-        href="/storage"
-        download
-      >
-        Файлы курсовой работы
-      </a>
+      <div className="corner-links">
+        <a
+          className="corner-link"
+          href="https://github.com/matv864/auctions"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub проекта
+        </a>
+        <a className="corner-link" href="/storage" download>
+          Файлы курсовой работы
+        </a>
+      </div>
       <header className="app-header">
         <h1>Симуляция аукционов</h1>
         <p className="tagline">Курсовой проект - сравнение механизмов торгов</p>
