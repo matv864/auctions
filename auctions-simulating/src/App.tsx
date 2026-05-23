@@ -24,6 +24,13 @@ function App() {
 
   return (
     <div className="app">
+      <a
+        className="bg-download-link"
+        href="/storage/auctions.xlsx"
+        download
+      >
+        Скачать таблицу сравнения характеристик
+      </a>
       <header className="app-header">
         <h1>Симуляция аукционов</h1>
         <p className="tagline">Курсовой проект - сравнение механизмов торгов</p>
