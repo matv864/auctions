@@ -26,10 +26,10 @@ function App() {
     <div className="app">
       <a
         className="bg-download-link"
-        href="/storage/auctions.xlsx"
+        href="/storage"
         download
       >
-        Скачать таблицу сравнения характеристик
+        Файлы курсовой работы
       </a>
       <header className="app-header">
         <h1>Симуляция аукционов</h1>
