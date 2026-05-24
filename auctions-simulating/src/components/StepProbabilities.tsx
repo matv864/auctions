@@ -30,37 +30,6 @@ export function StepProbabilities({
     <section className="card">
       <h2>3. Вероятности и распределения</h2>
 
-      <div className="row">
-        <label className="field">
-          <span>Вероятность сговора продавца</span>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={probs.sellerCollusion}
-            onChange={(e) =>
-              onChangeProbs({ sellerCollusion: Number(e.target.value) })
-            }
-          />
-          <em>{(probs.sellerCollusion * 100).toFixed(0)}%</em>
-        </label>
-        <label className="field">
-          <span>Вероятность кольца участников</span>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={probs.participantRing}
-            onChange={(e) =>
-              onChangeProbs({ participantRing: Number(e.target.value) })
-            }
-          />
-          <em>{(probs.participantRing * 100).toFixed(0)}%</em>
-        </label>
-      </div>
-
       <h3>Веса стратегий</h3>
       <div className="strategy-grid">
         {ALL_STRATEGIES.map((s) => (

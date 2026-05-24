@@ -1,6 +1,5 @@
 import type {
   AuctionState,
-  CollusionInfo,
   Player,
   PlayerAction,
   SimulationConfig,
@@ -27,25 +26,9 @@ export function pickStrategy(
   return entries[entries.length - 1]![0]
 }
 
-function ringShouldDefer(
-  player: Player,
-  collusion: CollusionInfo,
-  highBidderId: string | null,
-): boolean {
-  if (!collusion.ringActive || player.collusionRole !== 'ring_member') {
-    return false
-  }
-  if (!highBidderId) return false
-  return (
-    collusion.ringMemberIds.includes(highBidderId) &&
-    highBidderId !== player.id
-  )
-}
-
 export function decideEnglish(
   player: Player,
   auction: Extract<AuctionState, { kind: 'english' }>,
-  collusion: CollusionInfo,
   config: SimulationConfig,
 ): PlayerAction {
   if (!auction.activeIds.includes(player.id)) {
@@ -54,10 +37,6 @@ export function decideEnglish(
 
   const maxBid = maxBidForStrategy(player.strategy, player.valuation)
   const minRaise = minEnglishBid(auction, config)
-
-  if (ringShouldDefer(player, collusion, auction.highBidderId)) {
-    return { type: 'pass' }
-  }
 
   if (maxBid < minRaise) {
     return { type: 'pass' }
@@ -68,23 +47,14 @@ export function decideEnglish(
     return { type: 'pass' }
   }
 
-  if (player.collusionRole === 'favored' && collusion.sellerCollusion) {
-    return { type: 'bid', amount: Math.min(player.valuation, minRaise) }
-  }
-
   return { type: 'bid', amount: minRaise }
 }
 
 export function decideDutch(
   player: Player,
   auction: Extract<AuctionState, { kind: 'dutch' }>,
-  collusion: CollusionInfo,
 ): PlayerAction {
   if (!auction.activeIds.includes(player.id)) {
-    return { type: 'pass' }
-  }
-
-  if (ringShouldDefer(player, collusion, auction.winnerId)) {
     return { type: 'pass' }
   }
 
@@ -94,9 +64,6 @@ export function decideDutch(
       : maxBidForStrategy(player.strategy, player.valuation)
 
   if (auction.currentPrice <= threshold) {
-    if (player.collusionRole === 'favored' && collusion.sellerCollusion) {
-      return { type: 'accept' }
-    }
     if (player.strategy === 'passive' && auction.currentPrice > threshold * 0.85) {
       return { type: 'pass' }
     }
@@ -108,17 +75,9 @@ export function decideDutch(
 
 export function decideSealed(
   player: Player,
-  collusion: CollusionInfo,
   config: SimulationConfig,
 ): PlayerAction {
   const maxBid = maxBidForStrategy(player.strategy, player.valuation)
-
-  if (player.collusionRole === 'ring_member' && collusion.ringActive) {
-    const ringLeader = collusion.ringMemberIds[0]
-    if (ringLeader && ringLeader !== player.id) {
-      return { type: 'bid', amount: 0 }
-    }
-  }
 
   let amount = maxBid
   if (config.auctionType === 'sealed_first') {
@@ -127,9 +86,6 @@ export function decideSealed(
     } else if (player.strategy === 'aggressive') {
       amount = Math.floor(player.valuation * 0.9)
     }
-  }
-  if (player.collusionRole === 'favored' && collusion.sellerCollusion) {
-    amount = player.valuation
   }
 
   amount = Math.max(0, Math.min(amount, player.valuation))
@@ -141,15 +97,14 @@ export function decideSealed(
 export function decideAction(
   player: Player,
   auction: AuctionState,
-  collusion: CollusionInfo,
   config: SimulationConfig,
 ): PlayerAction {
   switch (auction.kind) {
     case 'english':
-      return decideEnglish(player, auction, collusion, config)
+      return decideEnglish(player, auction, config)
     case 'dutch':
-      return decideDutch(player, auction, collusion)
+      return decideDutch(player, auction)
     case 'sealed':
-      return decideSealed(player, collusion, config)
+      return decideSealed(player, config)
   }
 }

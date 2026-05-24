@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { strategyLabel } from '../content/reference.ts'
-import { collusionRoleLabel } from '../simulation/collusion.ts'
 import { auctionTypeLabel } from '../simulation/reports.ts'
 import type { GameState } from '../simulation/types.ts'
 import { isTickAuction } from '../simulation/types.ts'
@@ -17,7 +16,7 @@ interface Props {
 const MASK = '···'
 
 export function RoundView({ state, onStartRound, onHumanAction }: Props) {
-  const { config, players, auction, collusion, tickLog, currentRound } = state
+  const { config, players, auction, tickLog, currentRound } = state
   const roundNum = currentRound + 1
   const [detailsVisible, setDetailsVisible] = useState(false)
 
@@ -40,7 +39,7 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
           >
             {detailsVisible
               ? 'Скрыть данные участников'
-              : 'Показать оценки, стратегии, сговоры и статусы'}
+              : 'Показать оценки, стратегии и статусы'}
           </button>
           {state.phase === 'round_reveal' && (
             <button type="button" className="primary" onClick={onStartRound}>
@@ -49,26 +48,6 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
           )}
         </div>
       </header>
-
-      {collusion && (
-        <div className="collusion-banner">
-          {detailsVisible ? (
-            <>
-              {collusion.sellerCollusion && (
-                <span className="tag warn">Сговор продавца</span>
-              )}
-              {collusion.ringActive && (
-                <span className="tag warn">Кольцо участников</span>
-              )}
-              {!collusion.sellerCollusion && !collusion.ringActive && (
-                <span className="tag ok">Без сговора</span>
-              )}
-            </>
-          ) : (
-            <span className="tag neutral">Сговор: скрыто</span>
-          )}
-        </div>
-      )}
 
       {auction && (
         <div className="auction-status">
@@ -108,7 +87,6 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
             <th>Богатство</th>
             <th>Оценка</th>
             <th>Стратегия</th>
-            <th>Сговор</th>
             <th>Статус</th>
           </tr>
         </thead>
@@ -141,11 +119,6 @@ export function RoundView({ state, onStartRound, onHumanAction }: Props) {
                 </td>
                 <td className={detailsVisible ? '' : 'cell-masked'}>
                   {detailsVisible ? strategyLabel(p.strategy) : MASK}
-                </td>
-                <td className={detailsVisible ? '' : 'cell-masked'}>
-                  {detailsVisible
-                    ? collusionRoleLabel(p.collusionRole)
-                    : MASK}
                 </td>
                 <td className={detailsVisible ? '' : 'cell-masked'}>
                   {detailsVisible ? statusText : MASK}

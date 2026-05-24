@@ -31,10 +31,6 @@ export function SummaryView({ state, onReset }: Props) {
           </span>
         </div>
         <div className="stat">
-          <span className="stat-label">Раунды со сговором</span>
-          <span className="stat-value">{report.collusionRounds}</span>
-        </div>
-        <div className="stat">
           <span className="stat-label">Средняя цена</span>
           <span className="stat-value">
             {report.avgFinalPrice.toFixed(1)}
@@ -76,7 +72,6 @@ export function SummaryView({ state, onReset }: Props) {
             <th>Цена</th>
             <th>Продано</th>
             <th>Эфф.</th>
-            <th>Сговор</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +82,6 @@ export function SummaryView({ state, onReset }: Props) {
               <td>{r.sold ? r.price : '-'}</td>
               <td>{r.sold ? 'да' : 'нет'}</td>
               <td>{r.efficient ? 'да' : 'нет'}</td>
-              <td>{r.collusion ? 'да' : 'нет'}</td>
             </tr>
           ))}
         </tbody>

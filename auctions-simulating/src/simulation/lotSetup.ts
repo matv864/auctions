@@ -1,10 +1,8 @@
-import { assignCollusion } from './collusion.ts'
 import { median, sampleValuation } from './distributions.ts'
 import { pickStrategy } from './strategies.ts'
 import type { Rng } from './rng.ts'
 import type {
   AuctionState,
-  CollusionInfo,
   Player,
   SimulationConfig,
 } from './types.ts'
@@ -25,8 +23,6 @@ export function createPlayers(
       wealth: existingWealth?.get(id) ?? 100,
       valuation: 0,
       strategy: 'truthful',
-      collusionRole: 'none',
-      ringId: null,
       active: true,
     })
   }
@@ -53,7 +49,7 @@ export function prepareLot(
   config: SimulationConfig,
   rng: Rng,
   roundIndex: number,
-): { players: Player[]; collusion: CollusionInfo; auction: AuctionState } {
+): { players: Player[]; auction: AuctionState } {
   // Один RNG на лот, состояние сдвигается на каждого участника -
   // иначе fork(одинаковый offset) даёт всем одну оценку и стратегию.
   const lotRng = rng.fork(roundIndex * 1000 + 17)
@@ -62,16 +58,8 @@ export function prepareLot(
     ...p,
     valuation: sampleValuation(config.probs.valuation, lotRng),
     strategy: pickStrategy(config.probs.strategies, lotRng),
-    collusionRole: 'none' as const,
-    ringId: null,
     active: true,
   }))
-
-  const collusion = assignCollusion(
-    updated,
-    config.probs,
-    rng.fork(roundIndex * 100 + 3),
-  )
 
   const valuations = updated.map((p) => p.valuation)
   const reservePrice = computeReservePrice(valuations, config)
@@ -113,7 +101,7 @@ export function prepareLot(
     }
   }
 
-  return { players: updated, collusion, auction }
+  return { players: updated, auction }
 }
 
 export function needsTickLoop(config: SimulationConfig): boolean {

@@ -16,8 +16,6 @@ export type GamePhase =
 
 export type StrategyKind = 'truthful' | 'shade' | 'aggressive' | 'passive'
 
-export type CollusionRole = 'none' | 'ring_member' | 'favored'
-
 export type ReserveMode = 'fixed' | 'median_fraction' | 'auto'
 
 export type ValuationDistributionKind = 'uniform' | 'normal'
@@ -39,8 +37,6 @@ export interface ReserveConfig {
 }
 
 export interface SimulationProbabilities {
-  sellerCollusion: number
-  participantRing: number
   strategies: Record<StrategyKind, number>
   valuation: ValuationDistributionConfig
 }
@@ -69,17 +65,7 @@ export interface Player {
   wealth: number
   valuation: number
   strategy: StrategyKind
-  collusionRole: CollusionRole
-  ringId: number | null
   active: boolean
-}
-
-export interface CollusionInfo {
-  sellerCollusion: boolean
-  ringActive: boolean
-  ringId: number | null
-  favoredPlayerId: string | null
-  ringMemberIds: string[]
 }
 
 export interface EnglishAuctionState {
@@ -138,7 +124,6 @@ export interface TickLogEntry {
 export interface RoundResult {
   roundIndex: number
   auctionType: AuctionType
-  collusion: CollusionInfo
   reservePrice: number
   winnerId: string | null
   winnerName: string | null
@@ -170,7 +155,6 @@ export interface GameState {
   currentRound: number
   roundResults: RoundResult[]
   auction: AuctionState | null
-  collusion: CollusionInfo | null
   tickLog: TickLogEntry[]
   pendingHumanPlayerId: string | null
   humanActionKind: HumanActionKind | null
@@ -196,8 +180,6 @@ export function defaultConfig(): SimulationConfig {
     humanPlays: true,
     seed: Math.floor(Math.random() * 1000),
     probs: {
-      sellerCollusion: 0,
-      participantRing: 0,
       strategies: {
         truthful: 0.4,
         shade: 0.3,
@@ -220,7 +202,6 @@ export function defaultGameState(): GameState {
     currentRound: 0,
     roundResults: [],
     auction: null,
-    collusion: null,
     tickLog: [],
     pendingHumanPlayerId: null,
     humanActionKind: null,

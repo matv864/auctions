@@ -12,7 +12,6 @@ export interface PlayerAggregate {
 export interface SimulationReport {
   totalRounds: number
   efficiencyRate: number
-  collusionRounds: number
   avgFinalPrice: number
   soldRate: number
   playerAggregates: PlayerAggregate[]
@@ -22,7 +21,6 @@ export interface SimulationReport {
     price: number
     sold: boolean
     efficient: boolean
-    collusion: boolean
   }[]
 }
 
@@ -50,15 +48,11 @@ export function buildReport(
 
   const sold = results.filter((r) => r.sold)
   const efficient = results.filter((r) => r.efficient)
-  const collusionRounds = results.filter(
-    (r) => r.collusion.sellerCollusion || r.collusion.ringActive,
-  ).length
 
   return {
     totalRounds: results.length,
     efficiencyRate:
       results.length > 0 ? efficient.length / results.length : 0,
-    collusionRounds,
     avgFinalPrice:
       sold.length > 0
         ? sold.reduce((s, r) => s + r.finalPrice, 0) / sold.length
@@ -71,8 +65,6 @@ export function buildReport(
       price: r.finalPrice,
       sold: r.sold,
       efficient: r.efficient,
-      collusion:
-        r.collusion.sellerCollusion || r.collusion.ringActive,
     })),
   }
 }

@@ -170,10 +170,6 @@ button.ghost:hover {
   user-select: none;
 }
 
-.collusion-banner {
-  margin-bottom: 1rem;
-}
-
 .tag {
   display: inline-block;
   padding: 0.2rem 0.55rem;

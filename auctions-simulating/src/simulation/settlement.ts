@@ -1,6 +1,5 @@
 import type {
   AuctionState,
-  CollusionInfo,
   Player,
   PlayerRoundOutcome,
   RoundResult,
@@ -13,7 +12,6 @@ export function settleRound(
   config: SimulationConfig,
   players: Player[],
   auction: AuctionState,
-  collusion: CollusionInfo,
   tickCount: number,
 ): { players: Player[]; result: RoundResult } {
   let winnerId: string | null = null
@@ -74,7 +72,6 @@ export function settleRound(
   const result: RoundResult = {
     roundIndex,
     auctionType: config.auctionType,
-    collusion,
     reservePrice:
       auction.kind === 'sealed' ? auction.reservePrice : auction.reservePrice,
     winnerId,

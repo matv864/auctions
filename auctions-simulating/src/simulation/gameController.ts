@@ -77,7 +77,7 @@ export class GameController {
 
   beginRound(): void {
     const roundIndex = this.state.currentRound
-    const { players, collusion, auction } = prepareLot(
+    const { players, auction } = prepareLot(
       this.state.players,
       this.state.config,
       this.rng,
@@ -87,7 +87,6 @@ export class GameController {
     this.state = {
       ...this.state,
       players,
-      collusion,
       auction,
       tickLog: [],
       pendingHumanPlayerId: null,
@@ -127,8 +126,8 @@ export class GameController {
   }
 
   private runBotSealedBids(): void {
-    const { config, players, collusion, auction } = this.state
-    if (!auction || auction.kind !== 'sealed' || !collusion) return
+    const { config, players, auction } = this.state
+    if (!auction || auction.kind !== 'sealed') return
 
     let next = auction
     const logs: TickLogEntry[] = [...this.state.tickLog]
@@ -136,7 +135,7 @@ export class GameController {
     for (const p of players) {
       if (p.isHuman) continue
       if (next.bids[p.id] !== null) continue
-      const action = decideAction(p, next, collusion, config)
+      const action = decideAction(p, next, config)
       if (action.type === 'bid') {
         next = applySealedBid(next, p.id, action.amount)
         logs.push(createSealedLog(order++, p, action.amount))
@@ -167,7 +166,7 @@ export class GameController {
 
     const playerId = this.tickQueue.shift()!
     const player = this.state.players.find((p) => p.id === playerId)
-    if (!player || !this.state.auction || !this.state.collusion) {
+    if (!player || !this.state.auction) {
       this.processNextInQueue()
       return
     }
@@ -198,12 +197,7 @@ export class GameController {
       return
     }
 
-    const action = decideAction(
-      player,
-      auction,
-      this.state.collusion,
-      this.state.config,
-    )
+    const action = decideAction(player, auction, this.state.config)
     this.applyAction(player, action)
     if (this.state.phase !== 'running') {
       this.tickQueue = []
@@ -254,8 +248,7 @@ export class GameController {
   }
 
   private applyAction(player: Player, action: PlayerAction): void {
-    const { config, collusion } = this.state
-    if (!collusion) return
+    const { config } = this.state
 
     let auction = this.state.auction!
     const tick =
@@ -385,8 +378,8 @@ export class GameController {
   }
 
   private completeRound(): void {
-    const { config, players, auction, collusion, phase } = this.state
-    if (!auction || !collusion) return
+    const { config, players, auction, phase } = this.state
+    if (!auction) return
     if (phase === 'settle' || phase === 'summary') return
 
     const tickCount =
@@ -399,7 +392,6 @@ export class GameController {
       config,
       players,
       auction,
-      collusion,
       tickCount,
     )
 
